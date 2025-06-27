@@ -1,0 +1,49 @@
+<div class="container">
+  @if(authService.user?.role == 'administrateur' || authService.user?.role ==
+  'vendeur' ) {
+  <button mat-raised-button routerLink="/ajout-produit">
+    Ajouter un produit
+  </button>
+  }
+
+  <div class="row row-cols-2">
+    @for (item of produits; track $index) {
+
+    <div class="mb-4">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{ item.nom }}</mat-card-title>
+          <mat-card-subtitle>{{ item.prix }} €</mat-card-subtitle>
+        </mat-card-header>
+        <img
+          mat-card-image
+          src="https://placehold.co/600x400/png"
+          alt="Article"
+        />
+        <mat-card-content>
+          <p>
+            {{ item.description }}
+          </p>
+          <i
+            >Produit ajouté le :
+            {{ item.date_creation | date : "dd-MM-YYYY" }}</i
+          >
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>Acheter</button>
+
+          @if(authService.user?.role == 'administrateur' ||
+          authService.user?.role == 'vendeur' ) {
+
+          <button mat-button routerLink="/modifier-produit/{{item.id}}">Modifier</button>
+          <button mat-button (click)="onClickSuppressionUtilisateur(item)">
+            Supprimer
+          </button>
+          }
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    }
+  </div>
+</div>
