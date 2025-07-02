@@ -1,0 +1,43 @@
+<form (ngSubmit)="onAjoutCours()" [formGroup]="formulaire">
+  <mat-form-field>
+    <mat-label>Nom</mat-label>
+    <input matInput placeholder="cours chien" formControlName="nom" />
+
+    @if (formulaire.get('nom')?.hasError('required')) {
+    <mat-error>Le nom est requis</mat-error>
+    } @else {
+    <mat-error>Le nom ne peut pas avoir plus de 20 caractères</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Durée du Cours</mat-label>
+    <textarea
+      matInput
+      type="text"
+      placeholder="Ex. 30 minutes"
+      formControlName="duree_cours"
+    ></textarea>
+    <mat-error
+   >La duree ne peut pas avoir plus de 20 caractères
+  </mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Type</mat-label>
+  <textarea
+  matInput
+  type="text"
+  placeholder="Ex. Agilité"
+  formControlName="nom_type"
+  ></textarea>
+  <mat-error
+  
+  >Le type ne peut pass depasser plus de 20 caractères
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button type="submit">
+    {{ coursEdite ? "Modifier le cours" : "Ajouter le cours" }}
+  </button>
+</form>

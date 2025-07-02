@@ -1,19 +1,19 @@
 <div class="container">
-  @if(authService.user?.role == 'administrateur' || authService.user?.role ==
-  'vendeur' ) {
-  <button mat-raised-button routerLink="/ajout-produit">
-    Ajouter un produit
+  @if(authService.user?.role == 'admin' || authService.user?.role ==
+  'coach' ) {
+  <button mat-raised-button routerLink="/ajout-cours">
+    Ajouter un cours
   </button>
   }
 
   <div class="row row-cols-2">
-    @for (item of produits; track $index) {
+    @for (item of cours; track $index) {
 
     <div class="mb-4">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <mat-card-title>{{ item.nom }}</mat-card-title>
-          <mat-card-subtitle>{{ item.prix }} €</mat-card-subtitle>
+          <mat-card-title>{{ item.nom_cours }}</mat-card-title>
+          <mat-card-subtitle>{{ item.nom_type }} </mat-card-subtitle>
         </mat-card-header>
         <img
           mat-card-image
@@ -22,25 +22,24 @@
         />
         <mat-card-content>
           <p>
-            {{ item.description }}
+            {{ item.nom_type }}
           </p>
           <i
-            >Produit ajouté le :
-            {{ item.date_creation | date : "dd-MM-YYYY" }}</i
+            >Cours ajouté le :
+            {{ item.date_creation_cours | date : "dd-MM-YYYY" }}</i
           >
         </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>Acheter</button>
+<mat-card-actions>
+  <button mat-button (click)="onClickReserver(item)">Réserver</button>
 
-          @if(authService.user?.role == 'administrateur' ||
-          authService.user?.role == 'vendeur' ) {
+  @if(authService.user?.role == 'admin' || authService.user?.role == 'coach') {
+    <button mat-button [routerLink]="['/modifier-cours', item.id_cours]">Modifier</button>
+    <button mat-button (click)="onClickSuppressionCours(item)">
+      Supprimer
+    </button>
+  }
+</mat-card-actions>
 
-          <button mat-button routerLink="/modifier-produit/{{item.id}}">Modifier</button>
-          <button mat-button (click)="onClickSuppressionUtilisateur(item)">
-            Supprimer
-          </button>
-          }
-        </mat-card-actions>
       </mat-card>
     </div>
 

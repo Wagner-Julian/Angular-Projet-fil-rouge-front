@@ -22,15 +22,15 @@
             >Accueil</a
           >
         </li>
-        @if(authService.user?.role == "administrateur" || authService.user?.role
-        == "vendeur") {
+        @if(authService.user?.role == "admin" || authService.user?.role
+        == "coach") {
 
         <li class="nav-item">
           <a
             class="nav-link"
-            routerLink="/ajout-produit"
+            routerLink="/ajout-cours"
             routerLinkActive="page-actuelle"
-            >Ajouter un produit</a
+            >Ajouter un Cours</a
           >
         </li>
         }

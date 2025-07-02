@@ -11,6 +11,9 @@ import { NotificationService } from './services/notification.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  title(title: any) {
+    throw new Error('Method not implemented.');
+  }
   authService = inject(AuthService);
   notification = inject(NotificationService);
 

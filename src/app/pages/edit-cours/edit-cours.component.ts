@@ -12,76 +12,80 @@ import { NotificationService } from '../../services/notification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-edit-produit',
+  selector: 'app-edit-cours',
   imports: [FormsModule, ReactiveFormsModule, MatInputModule, MatButtonModule],
-  templateUrl: './edit-produit.component.html',
-  styleUrl: './edit-produit.component.scss',
+  templateUrl: './edit-cours.component.html',
+  styleUrl: './edit-cours.component.scss',
 })
-export class EditProduitComponent {
+export class EditCoursComponent {
+
   formBuilder = inject(FormBuilder);
   http = inject(HttpClient);
   notification = inject(NotificationService);
   router = inject(Router);
   activatedRoute = inject(ActivatedRoute);
 
-  formulaire = this.formBuilder.group({
-    nom: ['', [Validators.required, Validators.maxLength(20)]],
-    description: ['', [Validators.maxLength(50)]],
-  });
+formulaire = this.formBuilder.group({
+  nom: ['', [Validators.required, Validators.maxLength(20)]],
+  duree_cours: [null, [Validators.required, Validators.min(1)]], 
+  nom_type: ['', [Validators.maxLength(50)]],
+});
 
-  produitEdite: any;
+  coursEdite: any;
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((parametres) => {
-      //est on sur la page de modification ?
+     
       if (parametres['id']) {
-        //on recupère le produit via son id
+        //on recupère le cours via son id
+        console.log(this.formulaire.value); // 
+
         this.http
-          .get('http://localhost:5000/produit/' + parametres['id'])
-          .subscribe((produit) => {
-            //on hydrate les champs du formulaire avec le produit retourné
-            console.log(produit);
-            this.formulaire.patchValue(produit);
-            this.produitEdite = produit;
+          .get('http://localhost:5000/cours/' + parametres['id'])
+          .subscribe((cours) => {
+            //on hydrate les champs du formulaire avec le cours retourné
+            console.log(cours);
+            this.formulaire.patchValue(cours);
+            this.coursEdite = cours;
           });
       }
     });
   }
 
-  onAjoutProduit() {
+  onAjoutCours() {
     if (this.formulaire.valid) {
-      if (this.produitEdite) {
-        //on modifie le produit
+      if (this.coursEdite) {
+        //on modifie le cours
 
         this.http
           .put(
-            'http://localhost:5000/produit/' + this.produitEdite.id,
+            'http://localhost:5000/cours/' + this.coursEdite.id_cours,
             this.formulaire.value
           )
           .subscribe({
             next: (reponse) => {
-              this.notification.show('Le produit a bien été modifié', 'valid');
+              this.notification.show('Le cours a bien été modifié', 'valid');
               this.router.navigateByUrl('/accueil');
             },
             error: (erreur) => {
               if (erreur.status === 409) {
-                this.notification.show('Un produit porte déjà ce nom', 'error');
+                this.notification.show('Un cours porte déjà ce nom', 'error');
               }
             },
           });
       } else {
-        //on ajoute le produit
+        //on ajoute le cours
 
         this.http
-          .post('http://localhost:5000/produit', this.formulaire.value)
+          .post('http://localhost:5000/cours', this.formulaire.value)
           .subscribe({
             next: (reponse) => {
-              this.notification.show('Le produit a bien été ajouté', 'valid');
+              this.notification.show('Le cours a bien été ajouté', 'valid');
               this.router.navigateByUrl('/accueil');
             },
             error: (erreur) => {
               if (erreur.status === 409) {
-                this.notification.show('Un produit porte déjà ce nom', 'error');
+                this.notification.show('Un cours porte déjà ce nom', 'error');
               }
             },
           });

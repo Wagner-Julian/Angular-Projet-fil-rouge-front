@@ -3,7 +3,7 @@ import { AccueilComponent } from './pages/accueil/accueil.component';
 import { ConnexionComponent } from './pages/connexion/connexion.component';
 import { InscriptionComponent } from './pages/inscription/inscription.component';
 import { Page404Component } from './pages/page404/page404.component';
-import { EditProduitComponent } from './pages/edit-produit/edit-produit.component';
+import { EditCoursComponent } from './pages/edit-cours/edit-cours.component';
 import { vendeurGuard } from './services/vendeur.guard';
 
 export const routes: Routes = [
@@ -11,13 +11,13 @@ export const routes: Routes = [
   { path: 'connexion', component: ConnexionComponent },
   { path: 'inscription', component: InscriptionComponent },
   {
-    path: 'ajout-produit',
-    component: EditProduitComponent,
+    path: 'ajout-cours',
+    component: EditCoursComponent,
     canActivate: [vendeurGuard],
   },
   {
-    path: 'modifier-produit/:id',
-    component: EditProduitComponent,
+    path: 'modifier-cours/:id',
+    component: EditCoursComponent,
     canActivate: [vendeurGuard],
   },
   { path: '', redirectTo: 'accueil', pathMatch: 'full' },

@@ -15,29 +15,51 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './accueil.component.scss',
 })
 export class AccueilComponent {
+
   http = inject(HttpClient);
-  produits: any = [];
+  cours: any = [];
   notification = inject(NotificationService);
   authService = inject(AuthService);
 
+  /* ---------- INIT ---------- */
   ngOnInit() {
-    this.raffraichirProduit();
+    this.raffraichirCours();
   }
 
-  raffraichirProduit() {
+  /* ---------- CHARGER LA LISTE ---------- */
+  raffraichirCours() {
     this.http
-      .get('http://localhost:5000/utilisateurs/liste')
-      .subscribe((produits) => (this.produits = produits));
+      .get('http://localhost:5000/cours/liste')
+      .subscribe(cours => this.cours = cours);
   }
 
-  onClickSuppressionUtilisateur(item: any) {
-    if (confirm('Voulez-vous vraiment supprimer cette utilisateur ?')) {
+  /* ---------- SUPPRIMER UN COURS ---------- */
+  onClickSuppressionCours(item: any) {
+    if (confirm('Voulez-vous vraiment supprimer ce cours ?')) {
       this.http
-        .delete('http://localhost:5000/utilisateur/' + item.id)
-        .subscribe((reponse) => {
-          this.raffraichirProduit();
-          this.notification.show('Lutilisateur a bien été supprimé', 'valid');
+        .delete('http://localhost:5000/cours/' + item.id_cours)
+        .subscribe(() => {
+          this.raffraichirCours();
+          this.notification.show('Le cours a bien été supprimé', 'valid');
         });
     }
   }
+
+  /* ---------- RÉSERVER UN COURS ---------- */
+onClickReserver(item: any) {
+  this.http.post(
+      'http://localhost:5000/reservations',
+      { id_cours: item.id_cours },
+      { responseType: 'text' }           // ←  important
+  ).subscribe({
+    next: ()  => this.notification.show('Réservation confirmée', 'valid'),
+    error: err => {
+      if (err.status === 409) {
+        this.notification.show('Ce chien est déjà inscrit à ce cours', 'error');
+      } else {
+        this.notification.show('Impossible de réserver', 'error');
+      }
+    }
+  });
+}
 }
